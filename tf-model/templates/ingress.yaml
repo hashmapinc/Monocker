@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "tf_model_manager.fullname" . -}}
+{{- $serviceName := include "tf-model.fullname" . -}}
 {{- $servicePort := .Values.service.externalPort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "tf_model_manager.fullname" . }}
+  name: {{ template "tf-model.fullname" . }}
   labels:
-    app: {{ template "tf_model_manager.name" . }}
+    app: {{ template "tf-model.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
