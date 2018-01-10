@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Hello World App
+  title: Monocker Registry
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -18,43 +18,67 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+  /models:
+    x-swagger-router-controller: model_registry
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
+      description: Returns active models to the caller
+      operationId: getModels
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/ModelResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Registers 1 or more models
+      operationId: registerModels
+      parameters:
+        - name: model_name
+          description: Name of the model
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
+
+#Response definitions
 definitions:
-  HelloWorldResponse:
-    required:
-      - message
+  GeneralResponse:
+    type: object
     properties:
-      message:
+      success:
+        type: number
+        description: returns 1 if successful
+      description:
         type: string
+        description: a short comment 
+    required:
+      - success
+      - description
   ErrorResponse:
     required:
       - message
     properties:
       message:
         type: string
+  ModelResponse:
+    required:
+      - models
+    properties:
+      models:
+        type: array
+        items:
+          type: string
