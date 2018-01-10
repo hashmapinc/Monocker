@@ -10,12 +10,13 @@ FROM oscarfonts/h2:latest
 
 MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 
-# install node and npm
+# install node, npm, and swagger
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash \
   && apt-get update \
-  && apt-get install -y nodejs
+  && apt-get install -y nodejs \
+  && npm install -g swagger
 
-# start h2
+# start h2 in the background
 RUN java -cp /opt/h2/bin/h2*.jar org.h2.tools.Server \
   -web -webAllowOthers -webPort 81 \
   -tcp -tcpAllowOthers -tcpPort 1521 \
@@ -30,5 +31,6 @@ WORKDIR /monocker-registry
 # open node app port
 EXPOSE 10010
 
-CMD ["node", "app"]
+# start node app
+CMD ["swagger", "project", "start"]
 #==============================================================================
