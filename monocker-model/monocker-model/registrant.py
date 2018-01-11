@@ -6,22 +6,23 @@ import time
 #==============================================================================
 # Define global vars
 #==============================================================================
-# TODO: Add actual logic to get this information from k8s env vars
-REGISTRY_HOSTNAME = "monocker.registry" # this maybe shouldn't be hardcoded
-REGISTRY_IP = 10010 # this maybe shouldn't be hardcoded
-REGISTRY_ROUTENAME = "models" # this maybe shouldn't be hardcoded
-
+# get local ip address
 LOCAL_IP = socket.gethostbyname(socket.gethostname())
-TF_SERVING_PORT = 9000
 
-REGISTRATION_FREQUENCY = 60 #default
-#Get environment-set frequency if it exists
+#Get environment-set global configs
 try:
-  REGISTRATION_FREQUENCY = int(os.environ['REGISTRATION_FREQUENCY'])
+  TF_SERVING_PORT =         int(os.environ['REGISTRATION_FREQUENCY'])
+  REGISTRATION_FREQUENCY =  int(os.environ['REGISTRATION_FREQUENCY'])
+  REGISTRY_HOSTNAME =           os.environ['REGISTRY_HOSTNAME']
+  REGISTRY_PORT =           int(os.environ['REGISTRY_PORT'])
+  REGISTRY_ROUTE =              os.environ['REGISTRY_ROUTE']
+
 except Exception as e:
   print(e)
-  print("Using default registration frequency: " + 
-    str(REGISTRATION_FREQUENCY)) + " SECONDS"
+  print("===========================================================")
+  print("          MISSING REQUIRED ENVIRONMENT VARIABLES!          ")
+  print("===========================================================")
+  exit(1)
 #==============================================================================
 
 
@@ -45,12 +46,7 @@ def getModels():
 def register():
   payload = {'models': getModels()}
   target  = (
-    "http://" + 
-    REGISTRY_HOSTNAME +
-    ':' + 
-    str(REGISTRY_IP) +
-    '/' + 
-    REGISTRY_ROUTENAME
+    "http://"+ REGISTRY_HOSTNAME +':'+ str(REGISTRY_PORT) +'/'+ REGISTRY_ROUTE
   ) 
   requests.post(target, data=payload)
 #==============================================================================
@@ -66,6 +62,6 @@ while True:
     print('\n')
     print(e)
     print('\n')
-  
+
   time.sleep(REGISTRATION_FREQUENCY)
 #==============================================================================
