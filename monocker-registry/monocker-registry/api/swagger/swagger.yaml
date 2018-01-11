@@ -17,7 +17,12 @@ consumes:
 # format of the responses to the client (Accepts)
 produces:
   - application/json
+
+#define routes
 paths:
+  #============================================================================      
+  # models routes
+  #============================================================================
   /models:
     x-swagger-router-controller: model_registry
     get:
@@ -32,16 +37,17 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
     post:
       description: Registers 1 or more models
       operationId: registerModels
       parameters:
-        - name: model_name
-          description: Name of the model
+        - name: models
+          description: Array of 1 or more models
           in: body
           required: true
           schema:
-            type: string
+            $ref: "#/definitions/models"
       responses:
         "200":
           description: Success
@@ -51,11 +57,41 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  #============================================================================
+
+
+  #============================================================================      
+  # swagger routes
+  #============================================================================
   /swagger:
     x-swagger-pipe: swagger_raw
+  #============================================================================
 
-#Response definitions
+
 definitions:
+  #============================================================================      
+  # data definitions
+  #============================================================================
+  model:
+    type: object
+    properties:
+      model_name:
+        type: string
+      ip_address:
+        type: string
+      port:
+        type: integer
+
+  models:
+    type: array
+    items:
+      $ref: "#/definitions/model"
+  #============================================================================
+
+
+  #============================================================================      
+  # responses
+  #============================================================================
   GeneralResponse:
     type: object
     properties:
@@ -68,17 +104,18 @@ definitions:
     required:
       - success
       - description
+
   ErrorResponse:
     required:
       - message
     properties:
       message:
         type: string
+
   ModelResponse:
     required:
       - models
     properties:
       models:
-        type: array
-        items:
-          type: string
+        $ref: "#/definitions/models"
+  #============================================================================

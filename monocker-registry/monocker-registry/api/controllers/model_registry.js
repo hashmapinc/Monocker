@@ -1,7 +1,7 @@
 'use strict';
 
 //TODO: implement actual H2 db instead of this dummy array.
-var models = ["model_0"];
+var models = [];
 
 /** Gets all models registered in the last minute from H2
  *  
@@ -22,7 +22,7 @@ function getModels (req, res) {
  */
 function registerModels (req, res) {
   //TODO: Save models for real
-  models.push(req.swagger.params.model_name.value);
+  models.concat(req.swagger.params.model_name.value);
   res.json({success: 1, description: "Models added"});
 }
 
