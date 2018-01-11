@@ -2,9 +2,6 @@ FROM openjdk:8
 
 MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 
-# expose tf serving port
-EXPOSE 9000
-
 # install pip, python libs, and curl / run mnist files
 RUN apt-get update \
   && apt-get install -y \
@@ -29,6 +26,12 @@ RUN echo "deb [arch=amd64] http://storage.googleapis.com/tensorflow-serving-apt 
 
 # upload the entrypoint
 COPY monocker-model/ /monocker-model
+
+# configure environment variables
+ENV REGISTRATION_FREQUENCY=60
+
+# expose tf serving port
+EXPOSE 9000
 
 # run tf serving and start model registrant service
 CMD ["sh", "/monocker-model/entrypoint.sh"]
