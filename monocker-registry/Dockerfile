@@ -8,11 +8,12 @@ FROM python:3
 MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 
 # add flask app
-COPY monocker-registry/ /monocker-registry
+COPY monocker_registry/ /monocker_registry
 
-#install python libs
-WORKDIR /monocker-registry
-RUN pip install -r requirements.txt
+#install python libs and add app to python path
+WORKDIR /monocker_registry
+RUN pip install -r requirements.txt \
+    && export PYTHONPATH=..:$PYTHONPATH
 
 #add envs
 ENV REGISTRATION_FREQUENCY=60 \
@@ -22,6 +23,7 @@ ENV REGISTRATION_FREQUENCY=60 \
 # open flask app port
 EXPOSE 5000
 
-# start node app
+# start flask app
+#CMD ["python", "-m", "monocker_registry.app"]
 CMD ["/bin/bash"]
 #==============================================================================
