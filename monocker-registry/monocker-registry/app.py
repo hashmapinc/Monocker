@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restplus import Resource, Api, reqparse
+from flask_restplus import Api, fields, reqparse, Resource
 import os, sqlite3, time
 
 
@@ -55,13 +55,34 @@ def registerModel(model, now=int(time.time())):
 
 
 #==============================================================================
-# Flask 
+# App 
 #==============================================================================
+# Setup flask
 app = Flask(__name__)
-api = Api(app)
+api = Api(
+  app, 
+  version='1.0', 
+  title='Monocker Registry API',
+  description='A simple Monocker Registry API for managing Monocker Models in the Registry',
+)
 
+# Define models
+MonockerModel = api.model('MonockerModel', {
+    'model_name': fields.String,
+    'ip_address': fields.String,
+    'port':       fields.Integer
+})
+
+MonockerModelList = api.model('MonockerModelList', {
+    'models': fields.List(fields.Nested(MonockerModel)),
+})
+
+
+# Define /models route handlers
 @api.route('/models')
 class Models(Resource):
+
+    @api.marshal_with(MonockerModelList)
     def get(self):
         model = ({
           "model_name": "mnist",
@@ -73,6 +94,10 @@ class Models(Resource):
     def post(self):
       map(registerModel, models)
 
+
+
+
+# Run app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
 #==============================================================================
