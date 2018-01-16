@@ -1,40 +1,15 @@
-from flask import Flask, request
-from flask_restplus import Api, fields, Resource
+from flask import request
+from flask_restplus import fields, Namespace, Resource
 import os, sqlite3, time
 
-
-#==============================================================================
-# Define global vars
-#==============================================================================
-#Get environment-set global configs
-try:
-  REGISTRATION_FREQUENCY =  int(os.environ['REGISTRATION_FREQUENCY'])
-  REGISTRY_DB_PATH =            os.environ['REGISTRY_DB_PATH']
-  REGISTRY_TABLE_NAME =         os.environ['REGISTRY_TABLE_NAME']
-
-except Exception as e:
-  print(e)
-  print("===========================================================")
-  print("          MISSING REQUIRED ENVIRONMENT VARIABLES!          ")
-  print("===========================================================")
-  exit(1)
-
-
-REGISTRY_DB_CREATE = (
-  "CREATE TABLE IF NOT EXISTS monocker_registry ( " +
-    "model_name, ip_address, port, registration_time, " +
-    "PRIMARY KEY (model_name, ip_address, port)" +
-  ")"
-)
-#==============================================================================
-
+from monocker_registry import settings
 
 #==============================================================================
 # Helper functions
 #==============================================================================
 def createRegistryDB():
-  conn = sqlite3.connect(REGISTRY_DB_PATH)
-  conn.execute(REGISTRY_DB_CREATE)
+  conn = sqlite3.connect(settings.REGISTRY_DB_PATH)
+  conn.execute(settings.REGISTRY_DB_CREATE)
 
 def getFreshModels():
   now = int(time.time())
@@ -44,7 +19,7 @@ def registerModel(model, now=int(time.time())):
   try:
     model.registration_time = now
     print(model)
-    conn = sqlite3.connect(REGISTRY_DB_PATH)
+    conn = sqlite3.connect(settings.REGISTRY_DB_PATH)
     c = conn.cursor()
     c.execute("INSERT OR REPLACE INTO monocker_models VALUES (?,?,?,?)", model)
     conn.commit()
@@ -56,19 +31,10 @@ def registerModel(model, now=int(time.time())):
 
 
 #==============================================================================
-# App 
+# Models API 
 #==============================================================================
-# Setup flask
-app = Flask(__name__)
-api = Api(
-  app, 
-  version='0.1.0', 
-  title='Monocker Registry API',
-  description='A simple Monocker Registry API for managing Monocker Models in the Registry',
-)
-
 #define namespace
-models_ns = api.namespace(
+api = Namespace(
   'models', 
   description="Operations related to getting and posting models"
 )
@@ -86,7 +52,7 @@ MonockerModelList = api.model('MonockerModelList', {
 
 
 # Define /models route handlers
-@models_ns.route('/')
+@api.route('/')
 class Models(Resource):
   @api.response(404, 'Model not found.')
   @api.response(201, 'Successfully retrieved model(s).')
@@ -99,11 +65,4 @@ class Models(Resource):
   @api.expect(MonockerModelList)
   def post(self):
     return request.json
-
-
-
-
-# Run app
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
 #==============================================================================
