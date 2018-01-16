@@ -14,9 +14,14 @@ COPY monocker-registry/ /monocker-registry
 WORKDIR /monocker-registry
 RUN pip install -r requirements.txt
 
+#add envs
+ENV REGISTRATION_FREQUENCY=60 \
+    REGISTRY_DB_PATH=/mnt/registry.db \
+    REGISTRY_TABLE_NAME=monocker_registry
+
 # open flask app port
 EXPOSE 5000
 
 # start node app
-CMD ["python", "app.py"]
+CMD ["/bin/bash"]
 #==============================================================================
