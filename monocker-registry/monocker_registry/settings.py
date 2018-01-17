@@ -34,4 +34,14 @@ REGISTRY_INSERTION_SQL = (
   " VALUES " +
   "(?,?,?,?)"
 )
+REGISTRY_SELECTION_SQL = (
+  "SELECT " + 
+    "model_name, " +
+    "ip_address, " +
+    "port " +
+  "FROM " + 
+    REGISTRY_TABLE_NAME + " " +
+  "WHERE " +
+    "registration_time > " 
+)
 #==============================================================================

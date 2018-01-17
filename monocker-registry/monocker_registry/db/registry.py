@@ -26,6 +26,10 @@ def getConnection():
     conn = sqlite3.connect(settings.REGISTRY_DB_URI, uri=True)
   except sqlite3.OperationalError as e:
     #to get here, db doesn't exist. Create it then try again.
+    print("========================================")
+    print(e)
+    print("Creating database and retrying now")
+    print("========================================")
     createRegistryDB()
     conn = getConnection()
 
@@ -38,8 +42,31 @@ def getConnection():
 # settings.REGISTRATION_FREQUENCY seconds
 #==============================================================================
 def getFreshModels():
+  # calculate freshness cutoff
   now = int(time.time())
-  return [{ "model_name": "string", "ip_address": "string", "port": 0}]
+  cutoff = now - settings.REGISTRATION_FREQUENCY
+
+  # get connection and cursor
+  conn = getConnection()
+  c = conn.cursor()
+
+  # execute selection
+  freshModels_raw = c.execute(
+      settings.REGISTRY_SELECTION_SQL + str(cutoff)
+    ).fetchall()
+  conn.close()
+
+  # convert tuples list to dicts list
+  freshModels = []
+  for model in freshModels_raw:
+    freshModels.append({
+      'model_name': model[0],
+      'ip_address': model[1],
+      'port':       model[2]
+    })
+
+  # return fresh models
+  return freshModels
 #==============================================================================
 
 
@@ -55,7 +82,7 @@ def registerModel(model):
     int(time.time())
   )
 
-  #get connection and cursor
+  # get connection and cursor
   conn = getConnection()
   c = conn.cursor()
 
