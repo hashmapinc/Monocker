@@ -10,20 +10,19 @@ MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 # add flask app
 COPY monocker_registry/ /monocker_registry
 
-#install python libs and add app to python path
+#install python libs
 WORKDIR /monocker_registry
-RUN pip install -r requirements.txt \
-    && export PYTHONPATH=..:$PYTHONPATH
+RUN pip install -r requirements.txt
 
 #add envs
 ENV REGISTRATION_FREQUENCY=60 \
     REGISTRY_DB_PATH=/mnt/registry.db \
-    REGISTRY_TABLE_NAME=monocker_registry
+    REGISTRY_TABLE_NAME=monocker_registry \
+    PYTHONPATH=/:$PYTHONPATH
 
 # open flask app port
 EXPOSE 5000
 
 # start flask app
-#CMD ["python", "-m", "monocker_registry.app"]
-CMD ["/bin/bash"]
+CMD ["python", "-m", "monocker_registry.app"]
 #==============================================================================
