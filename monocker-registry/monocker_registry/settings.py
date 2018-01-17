@@ -17,10 +17,21 @@ except Exception as e:
   exit(1)
 
 
-REGISTRY_DB_CREATE = (
-  "CREATE TABLE IF NOT EXISTS monocker_registry ( " +
-    "model_name, ip_address, port, registration_time, " +
+# Generate derived global configs
+REGISTRY_DB_URI = 'file:' + REGISTRY_DB_PATH + '?mode=rw'
+REGISTRY_DB_CREATION_SQL = (
+  "CREATE TABLE IF NOT EXISTS " + REGISTRY_TABLE_NAME + " ( " +
+    "model_name, " +
+    "ip_address, " +
+    "port, " +
+    "registration_time, " +
     "PRIMARY KEY (model_name, ip_address, port)" +
   ")"
+)
+REGISTRY_INSERTION_SQL = (
+  "INSERT OR REPLACE INTO " + 
+  REGISTRY_TABLE_NAME + 
+  " VALUES " +
+  "(?,?,?,?)"
 )
 #==============================================================================

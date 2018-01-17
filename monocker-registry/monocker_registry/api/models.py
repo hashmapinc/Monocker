@@ -1,5 +1,4 @@
-from flask import request
-from flask_restplus import Resource
+from flask_restplus import Resource, abort
 
 from monocker_registry.api.restplus import restplus_api
 from monocker_registry.db.data_models import MonockerModelList
@@ -24,8 +23,18 @@ class Models(Resource):
     models = getFreshModels()
     return {'models': models}
 
-  @api.response(201, 'Model successfully registered.')
-  @api.expect(MonockerModelList, validate=True)
+  @api.response(202, 'No models found.')
+  @api.response(201, 'Model(s) successfully registered.')
+  @api.expect(MonockerModelList, validate=True, required=True)
   def post(self):
-    return request.json
+    # get models from request
+    models = restplus_api.payload['models']
+
+    # handle an empty models list
+    if not len(models):
+      return None, 202
+
+    # save models in the registry db
+    list(map(registerModel, models))#flask-restplus will Except any errors here
+    return None, 201
 #==============================================================================
