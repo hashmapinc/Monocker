@@ -25,13 +25,12 @@ metadata:
     app:      monocker
     service:  registry
     type:     persistentVolumeClaim
+  annotations:
+    volume.beta.kubernetes.io/storage-class: ""
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
-  selector:
-    matchLabels:
-      app:      monocker
-      service:  registry
+  volumeName: monocker-registry.pv
