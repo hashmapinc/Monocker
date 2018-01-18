@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: monocker-registry.deployment
+  labels:
+    app:      monocker
+    service:  registry
+    type:     deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:      monocker
+        service:  registry
+        type:     pod
+    spec:
+      volumes:
+        - name: monocker-registry
+          persistentVolumeClaim:
+            claimName: monocker-registry.pvc
+      containers:
+        - name: monocker-registry
+          imagePullPolicy: Never
+          image: randypitcherii/monocker-registry
+          ports:
+          - containerPort: 5000
+          volumeMounts:
+            - mountPath: "/mnt/monocker-registry"
+              name: monocker-registry
+      
