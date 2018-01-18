@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 
 #add envs
 ENV REGISTRATION_FREQUENCY=60 \
-    REGISTRY_DB_PATH=/mnt/registry.db \
+    REGISTRY_DB_PATH=/mnt/monocker-registry/registry.db \
     REGISTRY_TABLE_NAME=monocker_registry \
     PYTHONPATH=/:$PYTHONPATH
 
