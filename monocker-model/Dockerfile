@@ -30,8 +30,8 @@ COPY monocker-model/ /monocker-model
 # configure environment variables
 ENV TF_SERVING_PORT=9000 \
     REGISTRATION_FREQUENCY=60 \
-    REGISTRY_HOSTNAME=monocker.registry \
-    REGISTRY_PORT=10010 \
+    REGISTRY_HOSTNAME=monocker-registry-service \
+    REGISTRY_PORT=80 \
     REGISTRY_ROUTE=models
 
 # expose tf serving port

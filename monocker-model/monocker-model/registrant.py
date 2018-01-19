@@ -9,9 +9,9 @@ import time
 # get local ip address
 LOCAL_IP = socket.gethostbyname(socket.gethostname())
 
-#Get environment-set global configs
+# get environment-set global configs
 try:
-  TF_SERVING_PORT =         int(os.environ['REGISTRATION_FREQUENCY'])
+  TF_SERVING_PORT =         int(os.environ['TF_SERVING_PORT'])
   REGISTRATION_FREQUENCY =  int(os.environ['REGISTRATION_FREQUENCY'])
   REGISTRY_HOSTNAME =           os.environ['REGISTRY_HOSTNAME']
   REGISTRY_PORT =           int(os.environ['REGISTRY_PORT'])
@@ -46,9 +46,9 @@ def getModels():
 def register():
   payload = {'models': getModels()}
   target  = (
-    "http://"+ REGISTRY_HOSTNAME +':'+ str(REGISTRY_PORT) +'/'+ REGISTRY_ROUTE
+    "http://"+ REGISTRY_HOSTNAME +':'+ str(REGISTRY_PORT) +'/'+ REGISTRY_ROUTE + '/'
   ) 
-  requests.post(target, data=payload)
+  requests.post(target, json=payload)
 #==============================================================================
 
 
@@ -63,5 +63,6 @@ while True:
     print(e)
     print('\n')
 
-  time.sleep(REGISTRATION_FREQUENCY)
+  # sleep for 90% of the frequency.
+  time.sleep(int(REGISTRATION_FREQUENCY * 0.9))
 #==============================================================================
