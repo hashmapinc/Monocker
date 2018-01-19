@@ -10,11 +10,11 @@ MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 # add flask app
 COPY monocker_registry/ /monocker_registry
 
-#install python libs
+# install python libs
 WORKDIR /monocker_registry
 RUN pip install -r requirements.txt
 
-#add envs
+# add envs
 ENV REGISTRATION_FREQUENCY=60 \
     REGISTRY_DB_PATH=/mnt/monocker-registry/registry.db \
     REGISTRY_TABLE_NAME=monocker_registry \
