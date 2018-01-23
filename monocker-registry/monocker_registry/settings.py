@@ -1,4 +1,4 @@
-import os
+import os, traceback
 
 #==============================================================================
 # Define global configs
@@ -10,9 +10,11 @@ try:
   REGISTRY_TABLE_NAME =         os.environ['REGISTRY_TABLE_NAME']
 
 except Exception as e:
-  print(e)
   print("===========================================================")
   print("          MISSING REQUIRED ENVIRONMENT VARIABLES!          ")
+  print("Error:")
+  print(e)
+  traceback.print_exc()
   print("===========================================================")
   exit(1)
 

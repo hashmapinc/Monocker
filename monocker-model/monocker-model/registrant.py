@@ -2,6 +2,7 @@ import os
 import requests
 import socket
 import time
+import traceback
 
 #==============================================================================
 # Define global vars
@@ -18,9 +19,11 @@ try:
   REGISTRY_ROUTE =              os.environ['REGISTRY_ROUTE']
 
 except Exception as e:
-  print(e)
   print("===========================================================")
   print("          MISSING REQUIRED ENVIRONMENT VARIABLES!          ")
+  print("Error:")
+  print(e)
+  traceback.print_exc()
   print("===========================================================")
   exit(1)
 #==============================================================================
