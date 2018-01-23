@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 ENV REGISTRY_HOSTNAME=monocker-registry-service \
     REGISTRY_PORT=80 \
     REGISTRY_ROUTE=models \
-    PYTHONPATH=/mnt/:$PYTHONPATH
+    PYTHONPATH=/:$PYTHONPATH
 
 # open flask app port
 EXPOSE 80

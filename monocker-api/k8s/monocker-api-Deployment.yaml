@@ -16,8 +16,8 @@ spec:
         type:     pod
     spec:
       containers:
-        - name: monocker-api
-          imagePullPolicy: Never
-          image: randypitcherii/monocker-api
+        - name:             monocker-api
+          image:            randypitcherii/monocker-api
+          imagePullPolicy:  Always
           ports:
           - containerPort: 80

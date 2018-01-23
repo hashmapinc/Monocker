@@ -16,8 +16,9 @@ spec:
         type:     pod
     spec:
       containers:
-        - name: monocker-model
-          image: randypitcherii/monocker-model
+        - name:             monocker-model
+          image:            randypitcherii/monocker-model
+          imagePullPolicy:  Always
           ports:
           - containerPort: 9000
       

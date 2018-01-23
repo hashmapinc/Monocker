@@ -20,12 +20,12 @@ spec:
           persistentVolumeClaim:
             claimName: monocker-registry.pvc
       containers:
-        - name: monocker-registry
-          imagePullPolicy: Never
-          image: randypitcherii/monocker-registry
+        - name:             monocker-registry
+          imagePullPolicy:  Always
+          image:            randypitcherii/monocker-registry
           ports:
           - containerPort: 5000
           volumeMounts:
             - mountPath: "/mnt/monocker-registry"
-              name: monocker-registry
+              name:       monocker-registry
       
