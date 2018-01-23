@@ -1,26 +1,38 @@
 from flask_restplus import Resource, abort
-import requests
+import requests, traceback
 
 from monocker_api.api.restplus import restplus_api
 from monocker_api.db.data_models import MonockerModelList
+from monocker_api import settings
 
+#==============================================================================
+# helper functions
+#==============================================================================
+# TODO: actually implement logic to call monocker-registry 
 def getFreshModels():
-  model0 = {
-    'model_name': 'MNIST',
-    'ip_address': 'monocker_model.service',
-    'port':        80
-  }
-  model1 = {
-    'model_name': 'INCEPTION',
-    'ip_address': 'monocker_model.service',
-    'port':        80
-  }
-  return [model0, model1]
+  target  = (
+    "http://"+ settings.REGISTRY_HOSTNAME +':'+ str(settings.REGISTRY_PORT) + 
+    '/' + settings.REGISTRY_ROUTE + '/'
+  ) 
+  try:
+    response = requests.get(target).json()
+    models = response['models']
+  except Exception as e:
+    print("===========================================================")
+    print("Encountered error while requesting models.")
+    print("Error: ")
+    print(e)
+    traceback.print_exc()
+    print("===========================================================")
+    models = []
+  return models
+#==============================================================================
+
 
 #==============================================================================
 # Models API 
 #==============================================================================
-#define namespace
+# define namespace
 api = restplus_api.namespace(
   'models', 
   description="Operations related to getting and posting models"
@@ -33,7 +45,5 @@ class Models(Resource):
   @api.response(201, 'Successfully retrieved model(s).')
   @api.marshal_with(MonockerModelList)
   def get(self):
-    # TODO: actually implement logic to call monocker-registry 
-    models = getFreshModels()
-    return {'models': models}
+    return {'models': getFreshModels()}
 #==============================================================================
