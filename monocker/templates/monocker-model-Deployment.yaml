@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: monocker-model.deployment
+  labels:
+    app:      monocker
+    service:  model
+    type:     deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:      monocker
+        service:  model
+        type:     pod
+    spec:
+      containers:
+        - name:             monocker-model
+          image:            randypitcherii/monocker-model
+          imagePullPolicy:  Always
+          ports:
+          - containerPort: 9000
+      

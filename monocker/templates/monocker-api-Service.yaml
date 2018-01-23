@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: monocker-api-service
+  labels:
+    app:          monocker
+    service:      api
+    type:         service
+spec:
+  type: NodePort
+  ports:
+  - nodePort:   30111
+    port:       80
+    protocol:   TCP
+  selector:
+    app:      monocker
+    service:  api
