@@ -3,7 +3,7 @@
 #
 # Flask api for user interaction with monocker
 #==============================================================================
-FROM python:3
+FROM python:2
 
 MAINTAINER Randy Pitcher <randy.pitcher@hashmapinc.com>
 
