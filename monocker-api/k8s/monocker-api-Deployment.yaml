@@ -1,11 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: monocker-api.deployment
+  name: monocker-api.dev.deployment
   labels:
     app:      monocker
     service:  api
     type:     deployment
+    purpose:  dev
 spec:
   replicas: 1
   template:
@@ -21,3 +22,13 @@ spec:
           imagePullPolicy:  Always
           ports:
           - containerPort: 80
+          volumeMounts:
+          - mountPath: /mnt/monocker_api
+            name: dev-mount
+      volumes:
+      - name: dev-mount
+        hostPath:
+          # directory location on host
+          path: /mnt/monocker_api
+          # this field is optional
+          type: Directory
