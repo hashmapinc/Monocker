@@ -8,7 +8,6 @@ from monocker_api import settings
 #==============================================================================
 # helper functions
 #==============================================================================
-# TODO: actually implement logic to call monocker-registry 
 def getFreshModels():
   target  = (
     "http://"+ settings.REGISTRY_HOSTNAME +':'+ str(settings.REGISTRY_PORT) + 
