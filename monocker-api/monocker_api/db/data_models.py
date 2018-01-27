@@ -24,4 +24,19 @@ MonockerModelList = restplus_api.model('MonockerModelList', {
     description='List of 1 or more Monocker Models'
   )
 })
+
+# prediction request object
+PredictionRequest = restplus_api.model('PredictionRequest', {
+  'model_name': fields.String(required=True, 
+    description='Name of model to send predict request to.'),
+  'model_signature': fields.String(required=True,
+    description='Signature name used to define inputs/outputs of the model. ' +
+    'This value was set when the model was saved for tf serving deployment.'),
+  'model_input': fields.Raw(required=True,
+    description="Input to the model. It is the caller's responsibility " +
+    "to ensure that this input matches the model's requirements."),
+  'model_input_shape': fields.List(fields.Integer(), required=True,
+    description="Shape of the model input. For example, input=[[13,43]] would have a " +
+    "shape of [1,2].")
+  })
 #==============================================================================
