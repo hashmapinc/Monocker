@@ -21,7 +21,7 @@ spec:
           image:            randypitcherii/monocker-api
           imagePullPolicy:  Always
           ports:
-          - containerPort: 80
+          - containerPort: 8123
           volumeMounts:
           - mountPath: /mnt/monocker_api
             name: dev-mount

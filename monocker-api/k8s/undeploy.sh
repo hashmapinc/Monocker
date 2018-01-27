@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # undeploy service
-kubectl delete service monocker-api-service
+kubectl delete service monocker-api-dev-service
 
 # undeploy deployment (haha)
-kubectl delete deployment monocker-api.deployment
+kubectl delete deployment monocker-api.dev.deployment
