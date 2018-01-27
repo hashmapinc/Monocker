@@ -25,6 +25,15 @@ def getFreshModels():
     print("===========================================================")
     models = []
   return models
+
+def getModel(model_name):
+  models = getFreshModels()
+  for model in models:
+    if model['model_name'] == model_name:
+      return model
+
+  return None
+
 #==============================================================================
 
 
