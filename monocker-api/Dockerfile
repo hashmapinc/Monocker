@@ -23,6 +23,9 @@ ENV REGISTRY_HOSTNAME=monocker-registry-service \
 # open flask app port
 EXPOSE 80
 
+# dev port
+EXPOSE 8123
+
 # start flask app
 CMD ["python", "-m", "monocker_api.app"]
 #==============================================================================

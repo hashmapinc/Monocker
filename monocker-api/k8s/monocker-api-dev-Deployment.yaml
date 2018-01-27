@@ -15,6 +15,7 @@ spec:
         app:      monocker
         service:  api
         type:     pod
+        purpose:  dev
     spec:
       containers:
         - name:             monocker-api
