@@ -32,11 +32,11 @@ PredictionRequest = restplus_api.model('PredictionRequest', {
   'model_signature': fields.String(required=True,
     description='Signature name used to define inputs/outputs of the model. ' +
     'This value was set when the model was saved for tf serving deployment.'),
-  'model_input': fields.Raw(required=True,
+  'model_input': fields.List(fields.Arbitrary(), required=True,
     description="Input to the model. It is the caller's responsibility " +
     "to ensure that this input matches the model's requirements."),
   'model_input_shape': fields.List(fields.Integer(), required=True,
     description="Shape of the model input. For example, input=[[13,43]] would have a " +
-    "shape of [1,2].")
+    "shape of [2,1].")
   })
 #==============================================================================
