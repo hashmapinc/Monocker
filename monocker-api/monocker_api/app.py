@@ -25,5 +25,5 @@ app.register_blueprint(index_blueprint)
 # Run app
 if __name__ == '__main__':
   app.jinja_env.auto_reload = True
-  app.run(host='0.0.0.0', port=8123, debug=True)
+  app.run(host='0.0.0.0', port=80, debug=False)
 #==============================================================================
