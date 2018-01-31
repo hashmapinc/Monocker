@@ -35,13 +35,25 @@ except Exception as e:
 # This function detects all running models and generates a payload for
 # registering these models with the monocker-registry
 def getModels():
-  # TODO: Implement this for real
-  model = ({
-    "model_name": "mnist",
-    "ip_address": LOCAL_IP,
-    "port"      : TF_SERVING_PORT
-  })
-  models = [model]
+  # list model serving directories
+  modelsDir = '/monocker-model/models'
+  model_names = [
+    d for 
+      d in os.listdir(modelsDir) 
+    if 
+      os.path.isdir(os.path.join(os.path.abspath(modelsDir), d))
+  ]
+
+  # create models array
+  models = [
+    ({
+      "model_name": model_name,
+      "ip_address": LOCAL_IP,
+      "port"      : TF_SERVING_PORT
+    })
+    for model_name in model_names
+  ]
+
   return models
 
 
@@ -58,6 +70,10 @@ def register():
 #==============================================================================
 # Register local models every <REGISTRATION_FREQUENCY> seconds
 #==============================================================================
+# sleep for 5 seconds to ensure things have settled before first registration
+time.sleep(5)
+
+# perpetually register
 while True:
   try:
     register()
